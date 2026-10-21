@@ -24,7 +24,6 @@ The repository contains **six documented tasks** and a consolidated **Word/PDF a
 | **Institution** | International Cybersecurity and Digital Forensics Academy (ICDFA) |
 | **Course** | GRC205 — Incident Management and Business Continuity |
 | **Assessment** | Business Continuity and Disaster Recovery, Week 21 |
-| **Assessment weighting** | 100 marks; contributes 30% of final course grade |
 | **Repository owner** | [ayuba-amadi](https://github.com/ayuba-amadi) |
 
 ### Brief author biography
