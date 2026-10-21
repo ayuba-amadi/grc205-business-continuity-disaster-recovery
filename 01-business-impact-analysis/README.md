@@ -1,7 +1,7 @@
 # Task 1 — Business Impact Analysis
 
-**GRC205 | Northbridge Skills Institute | Stage 1 of 2**  
-**Status:** Stage 1 documented; awaiting review. Stage 2 will complete business prioritisation, dependency risks and the visual dependency map.
+**GRC205 | Northbridge Skills Institute | Task 1 of 6**  
+**Status:** Complete — Stage 1 BIA and Stage 2 prioritisation/dependencies integrated; pending user review.
 
 ## 1. Scope, evidence and assumptions
 
@@ -54,21 +54,71 @@ The owners are **proposed accountable business roles**; actual appointments and 
 1. **Simplified financial model:** Rates are stipulated teaching-case estimates and deliberately independent; they do not reflect real transaction volumes, changing demand, effective workarounds, insurance recoveries, avoided expenses or any escalation after 24 hours. Neither sum is an observed loss or a forecast of a 72-hour or five-day outage.
 2. **Incomplete total impact:** The model excludes learner welfare and accessibility, potential unfair treatment at the 11:00 examination, loss of academic confidence, institutional reputation, confidentiality and integrity consequences, regulatory exposures and the risk of incorrect payroll or duplicate finance entries. These effects cannot responsibly be inferred from the supplied hourly rates.
 
-## 4. Decision points for subsequent prioritisation
+## 4. Business recovery priority and time-critical decisions
 
-- **11:00 Day 0 — Examination:** An acceptable service must be confirmed before the examination; 25 alternate devices from 10:00 leave a 15-device shortfall for 40 centre-dependent candidates. The Academic Director must approve a verified workaround or fair rescheduling, rather than assume a technical restoration or an untested device-sharing arrangement.
-- **16:00 Day 0 — Fees:** Finance must establish provider-confirmed temporary recording and two-person reconciliation in time for the confirmation deadline.
-- **18:00 Day 0 — Admissions:** Registrar must authorise timestamped intake and a defensible closing-time/exception policy.
-- **12:00 Day 1 — Payroll:** Secure, dual-authorised bank instructions must be prepared without duplicating payments.
-- **48-hour service commitment — Records:** Maintain an auditable request queue, with no unverified certificate issuance.
+**Priority rule:** Rank the business **service outcome**, first by the earliest consequential deadline and learner harm, then by incremental cost and integrity exposure. The ranking is an analytical proposal for management approval, **not** a statement that the application can be restored in that order. Temporary continuity decisions may occur while technicians restore shared infrastructure.
 
-**Technical dependency observation:** F1–F4 rely on recovery network → AUTH01 → security/backup checks → DB01 → application; F5 relies on network → AUTH01 → security/backup checks → FS01. **Business urgency does not eliminate prerequisite restoration steps.** The complete ranked priority sequence, risk analysis and dependency diagram will be developed and reviewed in **Stage 2**.
+| Business priority | Function | Why this priority is justified | Decision / minimum-service milestone |
+|---:|---|---|---|
+| **1** | **F1 Teaching and assessment** | Highest hourly loss (**NGN 60,000**), immediate **11:00 Day 0** examination and fairness/accessibility risks; one-off **NGN 120,000** rescheduling trigger. | Before **11:00**, Examinations Lead either certifies an accessible, invigilated and authorised examination solution or approves and communicates fair rescheduling. **40** learners need centre equipment but only **25** workstations are supplied: a **15-device gap**. |
+| **2** | **F2 Fees and finance** | Next-largest hourly exposure (**NGN 40,000**), external payments still occur while local confirmation is unavailable; **16:00 Day 0** deadline. | By **16:00**, begin approved provider-verified provisional confirmations with unique IDs and two-person review; do not mark local DB01 balances as final until reconciled. |
+| **3** | **F3 Admissions and registration** | **18:00 Day 0** closing time; losing verified timestamps could unfairly reject applicants even where the hourly rate (**NGN 20,000**) is lower than F2. | By **18:00**, enforce an approved, timestamped and privacy-controlled temporary intake/cutoff process. |
+| **4** | **F4 Staff payroll** | Although payroll affects **90 staff**, its bank submission deadline is **12:00 Day 1**, later than F1–F3; incorrect or duplicated instructions have disproportionate integrity consequences. | Before **12:00 Day 1**, prepare and dual-authorise the bank file against verified payroll evidence; prevent duplicate submission. Escalate earlier if the approval lead time is insufficient. |
+| **5** | **F5 Records and certificates** | Lower incremental rate (**NGN 5,000/hour**) and **48-hour** commitment; nonetheless authenticity, confidentiality and urgent access requests require controls immediately. | From activation, log requests and respond to enquiries; issue records only after authoritative verification and Records Manager approval. |
 
-## 5. Stage 1 review gate
+**Priority qualification:** Payroll integrity or an urgent safeguarding/records matter may require escalation above its default ranking. This changes the **business decision queue**, not the system dependency sequence. The supplied 8-hour/24-hour cost model remains a *no-continuity* comparator; the above proposals do not retroactively reduce those calculated estimates.
 
-**Prepared for review:** Scenario assumptions; five-function BIA with proposed owners, affected users, resources and minimum service controls; people/premises/supplier/information requirements; accurate 8-hour and 24-hour impacts; financial-model limitations and deadline decisions.
+### Business deadlines versus technical recovery
 
-**Still to complete before Task 1 is accepted:** Final business priority ranking against deadline and impact, explicit differentiation from the technically feasible restoration order, at least three dependency risk assessments, and a concise dependency visual (Stage 2).
+The shared technical restoration sequence is **network → AUTH01 → security/backup checks → DB01 → LMS01/FIN01/REG01/HR01**, with **FS01** branching after security/backup checks without needing DB01. The assessment service cannot be declared technically restored merely because the DB01 restore finishes; LMS01 must also complete validation, then an authorised business owner must accept the examination service.
+
+For planning orientation only, the supplied sequential prerequisites require **30 + 30 + 30 + 90 + 45 = 225 minutes**, giving **11:45 WAT** as the earliest modelled LMS01 completion from **08:00**, even before any additional business acceptance or room/device validation. Thus technology alone **cannot** secure the **11:00** examination. Task 5 will schedule every action against the two-technician limit; this arithmetic is **not** a claim of a live recovery test.
+
+Business coordinators should work **in parallel** on the examination decision, payment-provider reconciliation, admissions intake and payroll preparation while technical staff rebuild the prerequisite systems. Any parallel activity must use distinct staff, controlled information access and documented approvals.
+
+## 5. Dependency risks and control requirements
+
+| Risk | Failure mode and consequence | Proposed control and response | Accountable role |
+|---|---|---|---|
+| **D1 — Shared DB01 bottleneck** | F1–F4 all depend on one database; failed or corrupt restoration delays four services simultaneously. | Validate the full-plus-incremental chain before recovery; retain protected fallback checkpoints; test restores and verify application-level data integrity. **Do not assume** a checkpoint passed until checked. | DR Lead |
+| **D2 — AUTH01 and identity concentration** | Local AUTH01 loss blocks all five local functions; Microsoft 365 email access does **not** substitute for local authentication. | Restore and test AUTH01 before dependent services; use pre-authorised, monitored emergency access with separation of duties, expiring credentials and logged approval. | DR Lead / Identity Administrator |
+| **D3 — Facilities and device shortfall** | Flood damage and site outage prevent local access; 25 alternate computers cannot simultaneously serve 40 centre-dependent examination learners. | Confirm safe/accessible premises, power and connectivity; secure **15 additional verified devices** or obtain explicit approval for a feasible alternative, with equality and exam-integrity checks. Unfunded capacity is **not assumed available**. | Facilities Lead / Examinations Lead |
+| **D4 — Two-technician capacity** | Shared restore tasks and competing application work contend for only two technicians; assigning a third technician or overlapping occupied work is invalid. | Use a dependency-aware, non-preemptive two-person schedule; have business coordinators perform temporary continuity work independently. | BC/DR Coordinator |
+| **D5 — Backup-admin and supplier access** | Production and network backup administration share an identity; provider access-independence controls are undocumented. Flood recovery could encounter unusable/compromised offsite copies. | Investigate supplier assurances, independent credential custody, offline/immutable backup and integrity validation; isolate suspected compromise and escalate to IR if evidenced. | DR Lead / Information Security Lead |
+| **D6 — Interim records and reconciliation** | Provider payments, admissions entries and payroll approvals can diverge from restored local data, causing duplicates, omissions or unauthorised disclosure. | Number and timestamp interim transactions; apply dual authorisation, restricted storage and reconciled import with documented exception resolution and business-owner sign-off. | Finance Manager / Registrar / HR Manager |
+
+### Compact dependency diagram
+
+The following Mermaid diagram is **a planning depiction**, not a measured recovery trace. Service owners retain business acceptance authority after technology is validated.
+
+```mermaid
+flowchart TD
+    N["Recovery network"] --> A["AUTH01 local directory"]
+    A --> S["Security / backup checks"]
+    S --> D["DB01 shared database"]
+    D --> L["LMS01 → F1 Assessment"]
+    D --> F["FIN01 → F2 Finance"]
+    D --> R["REG01 → F3 Admissions"]
+    D --> H["HR01 → F4 Payroll"]
+    S --> X["FS01 → F5 Records"]
+    C["Business coordinators / M365 mobile comms"] -. "Temporary approved services" .-> L
+    C -. "Provider reconciliation" .-> F
+    C -. "Timestamped intake" .-> R
+    C -. "Verified payroll approval" .-> H
+    C -. "Request queue" .-> X
+```
+
+**Interpretation:** Solid arrows represent required **technical prerequisites** (the security/backup check prerequisite for FS01 is preserved); dashed arrows indicate **continuity coordination**, not restoration of unavailable applications. Other required conditions—including people, privacy controls, alternate premises, suppliers and owner validation—remain in the five-function BIA.
+
+## 6. Task 1 marking-rubric self-check
+
+| Rubric element (20 marks) | Evidence in this README | Assessment |
+|---|---|---|
+| **Complete BIA and minimum service — 6 marks** | Five owner-led function rows; users, deadlines, resources, shared systems, minimum services and approvals; people, premises, suppliers, information | Addressed; staffing availability and supplier commitments clearly unverified |
+| **Correct impact calculations — 8 marks** | Function-by-function 8-hour and 24-hour workings; totals **NGN 1,200,000** and **NGN 3,360,000**; once-only exam charge; two model limitations | Addressed; clearly marked hypothetical estimates |
+| **Justified priorities and dependency risks — 6 marks** | Ranked F1–F5 with deadline logic, business-versus-technical distinction, six controlled risks and Mermaid dependency map | Addressed; 11:45 baseline is planning arithmetic, not a completed restoration |
+
+**Review disposition:** All specified Task 1 deliverable categories are documented. Formal grading remains with the assessor; objectives and detailed technician scheduling will be developed in Tasks 2 and 5 respectively. No live testing, purchased recovery service or real-world data loss is claimed.
 
 ## References
 
